@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 
 export default function QuestPopup({ addQuest, setShowPopup }) {
   const [title, setTitle] = useState('');
-  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (title && name && date && time) {
+    if (title && description && date && time) {
       const dateTime = new Date(`${date}T${time}`).toISOString();
       addQuest(title, name, dateTime);
       setTitle('');
-      setName('');
+      setDescription('');
       setDate('');
       setTime('');
       setShowPopup(false);
@@ -33,9 +33,9 @@ export default function QuestPopup({ addQuest, setShowPopup }) {
           />
           <input
             type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             className="p-2 border rounded"
           />
           <input
