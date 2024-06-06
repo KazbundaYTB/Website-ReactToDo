@@ -3,27 +3,43 @@ import React, { useState } from 'react';
 export default function QuestPopup({ addQuest, setShowPopup }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
+
+  // Inicializace stavu s aktuálním datem a časem + 1 hodina
+  const getDefaultDate = () => {
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDay() + 3); // Přidání jedné hodiny
+    return currentDate.toISOString().split('T')[0];
+  };
+
+  const getDefaultTime = () => {
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 1); // Přidání jedné hodiny
+    return currentDate.toTimeString().split(':').slice(0, 2).join(':');
+  };
+
+  const [date, setDate] = useState(getDefaultDate());
+  const [time, setTime] = useState(getDefaultTime());
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (title && description && date && time) {
       const dateTime = new Date(`${date}T${time}`).toISOString();
-      addQuest(title, name, dateTime);
+      addQuest(title, description, dateTime);
       setTitle('');
       setDescription('');
-      setDate('');
-      setTime('');
+      setDate(getDefaultDate());
+      setTime(getDefaultTime());
       setShowPopup(false);
     }
   };
 
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"> {/* Přidáno z-index pro umístění nad vším */}
-      <div className="bg-white p-6 rounded shadow-lg w-[320px] left-0"> {/* Třída left-0 pro posunutí do levé části obrazovky */}
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white p-6 rounded shadow-lg w-[320px] left-0">
         <h2 className="text-2xl mb-4">Add New Quest</h2>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
+          Title:
           <input
             type="text"
             placeholder="Quest Title"
@@ -31,19 +47,21 @@ export default function QuestPopup({ addQuest, setShowPopup }) {
             onChange={(e) => setTitle(e.target.value)}
             className="p-2 border rounded"
           />
-          <input
-            type="text"
+           <br />Description:
+          <textarea
             placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="p-2 border rounded"
+            className="p-2 border rounded h-[80px]"
           />
+          <div className='space-x-2 flex flex-col text-center '> Date & Time:
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             className="p-2 border rounded"
-          />
+          /> 
+          </div>          
           <input
             type="time"
             value={time}

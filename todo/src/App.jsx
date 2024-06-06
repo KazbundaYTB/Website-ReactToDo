@@ -112,6 +112,7 @@ function App() {
     quest.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+
   return (
     <div style={{ width: parentWidth > 1000 ? 410 : parentWidth}}>
     <div className="w-screen h-screen bg-gray-700" style={{ width: parentWidth }}>
