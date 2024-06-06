@@ -1,15 +1,15 @@
 import React from 'react';
 import { IoLogInOutline } from "react-icons/io5";
-import { FaPlus } from "react-icons/fa";
+import { IoMdAdd } from "react-icons/io";
 
 export default function NavBar({ setShowPopup, handleSignOut }) {
   return (
     <div className="flex justify-around items-center w-full">
       <button 
-        onClick={() => setShowPopup(true)} // Zde jsme nastavili, aby se popup vždy otevřel při kliknutí na tlačítko
-        className="p-2 text-2xl text-white bg-blue-500 rounded"
+        onClick={() => setShowPopup(true)} 
+        className="p-2 text-2xl text-white bg-blue-500 rounded-full"
       >
-        <FaPlus />
+        <IoMdAdd />
       </button>
       <button 
         onClick={handleSignOut} 
