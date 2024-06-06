@@ -1,5 +1,5 @@
 import React from 'react';
-import { IoLogInOutline } from "react-icons/io5";
+import { IoLogOutOutline } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
 
 export default function NavBar({ setShowPopup, handleSignOut }) {
@@ -15,7 +15,7 @@ export default function NavBar({ setShowPopup, handleSignOut }) {
         onClick={handleSignOut} 
         className="p-2 bg-red-500 rounded"
       >
-        <IoLogInOutline />
+        <IoLogOutOutline />
       </button>
     </div>
   );
