@@ -133,7 +133,7 @@ function App() {
         <QuestList searchQuery={searchQuery} quests={filteredQuests} deleteQuest={deleteQuest} />
       </div>
       <div className="h-[10%] bg-gray-500 flex justify-center items-center text-2xl rounded-2xl" >
-        <NavBar setShowPopup={setShowPopup} handleSignOut={handleSignOut} />
+        <NavBar setShowPopup={setShowPopup} handleSignOut={handleSignOut} questArrayLength={quests.length}  />
       </div>
     </div>
     </div>
