@@ -5,7 +5,7 @@ import NavBar from "./components/NavBar";
 import Login from "./components/LoginScreen";
 import QuestPopup from "./components/QuestPopup";
 import { db } from "./api/firebaseConfig";
-import { collection, query, where, getDocs, addDoc, onSnapshot } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { deleteDoc, doc } from "firebase/firestore";
 
@@ -52,6 +52,7 @@ function App() {
       return () => unsubscribe();
     }
   }, [user]);
+
   useEffect(() => {
     const handleResize = () => {
       const windowWidth = window.innerWidth;
@@ -108,34 +109,53 @@ function App() {
     }
   };
 
+  const updateQuest = async (updatedQuest) => {
+    if (user && user.uid) {
+      try {
+        const questDocRef = doc(db, "quests", updatedQuest.id);
+        await updateDoc(questDocRef, {
+          title: updatedQuest.title,
+          name: updatedQuest.name,
+          time: updatedQuest.time,
+        });
+        setQuests(prevQuests => 
+          prevQuests.map(quest =>
+            quest.id === updatedQuest.id ? updatedQuest : quest
+          )
+        );
+      } catch (error) {
+        console.error("Error updating quest: ", error);
+      }
+    }
+  };
+
   const filteredQuests = quests.filter(quest =>
     quest.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-
   return (
-    <div style={{ width: parentWidth > 1000 ? 410 : parentWidth}}>
-    <div className="w-screen h-screen bg-gray-700" style={{ width: parentWidth }}>
-      {showPopup && <QuestPopup addQuest={addQuest} setShowPopup={setShowPopup} />}
-      <div className="h-[5%] text-white flex justify-center items-center text-2xl">
-        <h1>QUESTS:</h1>
+    <div style={{ width: parentWidth > 1000 ? 410 : parentWidth }}>
+      <div className="w-screen h-screen bg-gray-700" style={{ width: parentWidth }}>
+        {showPopup && <QuestPopup addQuest={addQuest} setShowPopup={setShowPopup} />}
+        <div className="h-[5%] text-white flex justify-center items-center text-2xl">
+          <h1>QUESTS:</h1>
+        </div>
+        <div className="h-[10%] text-black flex justify-center items-center text-2xl">
+          <input
+            type="search"
+            placeholder="Search for your quest!"
+            className="rounded placeholder-black"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        <div className="h-[65%] bg-gray-600 flex flex-col justify-center items-center text-2xl space-y-3 overflow-y-auto">
+          <QuestList searchQuery={searchQuery} quests={filteredQuests} deleteQuest={deleteQuest} updateQuest={updateQuest} />
+        </div>
+        <div className="h-[10%] bg-gray-500 flex justify-center items-center text-2xl rounded-2xl">
+          <NavBar setShowPopup={setShowPopup} handleSignOut={handleSignOut} questArrayLength={quests.length} />
+        </div>
       </div>
-      <div className="h-[10%] text-black flex justify-center items-center text-2xl">
-        <input
-          type="search"
-          placeholder="Search for your quest!"
-          className="rounded placeholder-black"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
-      <div className="h-[65%] bg-gray-600 flex flex-col justify-center items-center text-2xl space-y-3 overflow-y-auto">
-        <QuestList searchQuery={searchQuery} quests={filteredQuests} deleteQuest={deleteQuest} />
-      </div>
-      <div className="h-[10%] bg-gray-500 flex justify-center items-center text-2xl rounded-2xl" >
-        <NavBar setShowPopup={setShowPopup} handleSignOut={handleSignOut} questArrayLength={quests.length}  />
-      </div>
-    </div>
     </div>
   );
 }
