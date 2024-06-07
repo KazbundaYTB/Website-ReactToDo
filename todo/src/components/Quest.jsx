@@ -90,6 +90,8 @@ export default function Quest({ quest, deleteQuest, updateQuest }) {
         <button onClick={handleDelete} className="bg-transparent border-none outline-none cursor-pointer">
           <FaTrash style={{ fontSize: '0.8rem' }} className="text-red-600" />
         </button>
+      </div>
+      <div className="absolute right-0 bottom-0 mr-[10px] mb-[10px]">
         <button onClick={handleEdit} className="bg-transparent border-none outline-none cursor-pointer">
           <FaPen style={{ fontSize: '0.8rem' }} className="text-gray-600" />
         </button>
