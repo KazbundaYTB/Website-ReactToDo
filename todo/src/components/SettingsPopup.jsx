@@ -19,12 +19,12 @@ export default function SettingsPopup({ handleSettingsClose, handleSignOut }) {
           </button>
         </div>
         <div className="flex items-center mb-4">
-          <span className="mr-2">Customisation:</span>
+          <span className="mr-2">Customization:</span>
           <button 
             disabled
             className="p-2 text-white bg-emerald-700 hover:bg-emerald-600 rounded-md w-[120px] cursor-not-allowed"
           >
-            Customise
+            Customize
           </button>
         </div>
         <div className="flex items-center mt-6">
