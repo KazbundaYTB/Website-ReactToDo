@@ -4,6 +4,7 @@ import QuestList from "./components/QuestList";
 import NavBar from "./components/NavBar";
 import Login from "./components/LoginScreen";
 import QuestPopup from "./components/QuestPopup";
+import SettingsPopup from "./components/SettingsPopup";
 import { db } from "./api/firebaseConfig";
 import { collection, query, where, getDocs, addDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
@@ -14,6 +15,7 @@ function App() {
   const [quests, setQuests] = useState([]);
   const [user, setUser] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [ShowSettingsPopup, setShowSettingsPopup] = useState(false);
   const [parentWidth, setParentWidth] = useState('auto');
 
   const auth = getAuth();
@@ -86,6 +88,8 @@ function App() {
     }
   };
 
+  const handleSettingsClose = () =>{ setShowSettingsPopup(false)}
+  
   const handleSignOut = async () => {
     try {
       await signOut(auth);
@@ -136,7 +140,8 @@ function App() {
   return (
     <div style={{ width: parentWidth > 1000 ? 410 : parentWidth }}>
       <div className="w-screen h-screen bg-gray-700" style={{ width: parentWidth }}>
-        {showPopup && <QuestPopup addQuest={addQuest} setShowPopup={setShowPopup} />}
+      {showPopup && <QuestPopup addQuest={addQuest} setShowPopup={setShowPopup} />}
+      {ShowSettingsPopup && <SettingsPopup setShowPopup={setShowPopup} handleSettingsClose={handleSettingsClose} handleSignOut={handleSignOut} />}
         <div className="h-[5%] text-white flex justify-center items-center text-2xl">
           <h1>QUESTS:</h1>
         </div>
@@ -153,7 +158,7 @@ function App() {
           <QuestList searchQuery={searchQuery} quests={filteredQuests} deleteQuest={deleteQuest} updateQuest={updateQuest} />
         </div>
         <div className="h-[10%] bg-gray-500 flex justify-center items-center text-2xl rounded-2xl">
-          <NavBar setShowPopup={setShowPopup} handleSignOut={handleSignOut} questArrayLength={quests.length} />
+          <NavBar setShowPopup={setShowPopup} setShowSettingsPopup={setShowSettingsPopup} handleSignOut={handleSignOut} questArrayLength={quests.length} />
         </div>
       </div>
     </div>

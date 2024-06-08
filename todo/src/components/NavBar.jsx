@@ -1,9 +1,9 @@
 import React from 'react';
-import { IoLogOutOutline } from "react-icons/io5";
+import { FiAlignLeft } from "react-icons/fi";
 import { FaRegFileAlt } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 
-export default function NavBar({ setShowPopup, handleSignOut, questArrayLength }) {
+export default function NavBar({ setShowPopup, setShowSettingsPopup, questArrayLength }) {
   return (
     <div className="flex justify-around items-center w-full">
       <div className="relative">
@@ -11,7 +11,7 @@ export default function NavBar({ setShowPopup, handleSignOut, questArrayLength }
           {questArrayLength}
         </span>
         <button className="p-2 bg-white text-emerald-500 rounded-md ">
-          <FaRegFileAlt /> {/* emerald-500 color */}
+          <FaRegFileAlt />
         </button>
       </div>
       <button 
@@ -21,10 +21,10 @@ export default function NavBar({ setShowPopup, handleSignOut, questArrayLength }
         <IoMdAdd style={{ fontSize: '135%' }}/>
       </button>
       <button 
-        onClick={handleSignOut} 
+        onClick={() => setShowSettingsPopup(true)}
         className="p-2 bg-white text-emerald-500 rounded-md"
       >
-        <IoLogOutOutline />
+        <FiAlignLeft />
       </button>
     </div>
   );

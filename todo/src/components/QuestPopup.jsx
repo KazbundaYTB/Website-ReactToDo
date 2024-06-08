@@ -37,7 +37,7 @@ export default function QuestPopup({ addQuest, setShowPopup }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded shadow-lg w-[320px] left-0">
-        <h2 className="text-2xl mb-4">Add New Quest</h2>
+        <h2 className="text-2xl mb-4 text-center">Add New Quest</h2>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
           Title:
           <input
@@ -69,7 +69,7 @@ export default function QuestPopup({ addQuest, setShowPopup }) {
             className="p-2 border rounded"
           />
           <div className="flex justify-between">
-            <button type="button" onClick={() => setShowPopup(false)} className="p-2 bg-gray-300 rounded">Cancel</button>
+            <button type="button" onClick={() => setShowPopup(false)} className="p-2 bg-red-300 rounded">Close</button>
             <button type="submit" className="p-2 bg-blue-500 rounded text-white">Add Quest</button>
           </div>
         </form>
