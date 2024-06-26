@@ -1,6 +1,5 @@
-// Login.jsx
 import React, { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 const Login = ({ setUser }) => {
   const [email, setEmail] = useState('');
@@ -8,6 +7,7 @@ const Login = ({ setUser }) => {
   const [error, setError] = useState('');
 
   const auth = getAuth();
+  const googleProvider = new GoogleAuthProvider();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -19,6 +19,14 @@ const Login = ({ setUser }) => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      setUser(result.user);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-700 text-white">
@@ -41,6 +49,12 @@ const Login = ({ setUser }) => {
         />
         <button type="submit" className="p-2 bg-blue-500 rounded">Login</button>
       </form>
+      <button
+        onClick={handleGoogleLogin}
+        className="p-2 mt-4 bg-red-500 rounded"
+      >
+        Login with Google
+      </button>
       <br />
       <p>This app is in testing phase, if you want access contact "Kazbunda (Kazbunda#9069)" on discord!</p>
     </div>
