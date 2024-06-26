@@ -85,7 +85,7 @@ export default function Quest({ quest, deleteQuest, updateQuest }) {
   };
 
   return (
-    <div className={`p-5 whitespace-nowrap text-2xl text-black rounded-xl w-auto m-3 relative ${expired ? 'bg-red-500' : 'bg-white'}`}>
+    <div className={`p-5 whitespace-nowrap text-2xl text-black rounded-xl w-auto m-3 relative bg-white`}>
       <div className="absolute right-0 mr-[10px] flex flex-col space-y-2">
         <button onClick={handleDelete} className="bg-transparent border-none outline-none cursor-pointer">
           <FaTrash style={{ fontSize: '0.8rem' }} className="text-red-600" />
@@ -103,8 +103,9 @@ export default function Quest({ quest, deleteQuest, updateQuest }) {
         </div>
         <div>
           <p>{title}</p>
-          <div className={`inline-block rounded-xl px-2 py-1 mt-2 ${isExpiringSoon ? 'bg-orange-500' : 'bg-emerald-400'}`}>
-            {!expired && <p className="text-sm text-white">Ends in: {timeRemaining}</p>}
+          <div className={`inline-block rounded-xl px-2 py-1 mt-2 ${isExpiringSoon ? 'bg-orange-500' : 'bg-emerald-400'} ${expired ? 'bg-red-500' : ''}`}>
+          {!expired && <p className="text-sm text-white">Ends in: {timeRemaining}</p>}
+          {expired && <p className="text-sm text-white">EXPIRED</p>}
           </div>
         </div>
       </div>
