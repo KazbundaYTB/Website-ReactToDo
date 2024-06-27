@@ -6,7 +6,7 @@ export default function QuestList({ quests, deleteQuest }) {
     <div className="w-full h-full flex flex-col justify-start space-y-1 overflow-y-scroll">
       {quests.length === 0 ? (
           <div className="text-center text-red-600 text-xl font-bold">
-            You don't have any quests to do!
+            You don't have any tasks to do!
           </div>
         ) : (
           quests.map((quest) => (

@@ -6,17 +6,25 @@ import Login from "./components/LoginScreen";
 import QuestPopup from "./components/QuestPopup";
 import SettingsPopup from "./components/SettingsPopup";
 import { db } from "./api/firebaseConfig";
-import { collection, query, where, getDocs, addDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { deleteDoc, doc } from "firebase/firestore";
 
 function App() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [quests, setQuests] = useState([]);
   const [user, setUser] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [ShowSettingsPopup, setShowSettingsPopup] = useState(false);
-  const [parentWidth, setParentWidth] = useState('auto');
+  const [parentWidth, setParentWidth] = useState("auto");
 
   const auth = getAuth();
 
@@ -28,12 +36,19 @@ function App() {
   }, [auth]);
 
   useEffect(() => {
-    if (user && user.uid) { // Kontrola, že user není null a má vlastnost uid
+    if (user && user.uid) {
+      // Kontrola, že user není null a má vlastnost uid
       const fetchQuests = async () => {
-        const q = query(collection(db, "quests"), where("userId", "==", user.uid));
+        const q = query(
+          collection(db, "quests"),
+          where("userId", "==", user.uid)
+        );
         try {
           const querySnapshot = await getDocs(q);
-          const questsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          const questsData = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
           setQuests(questsData);
         } catch (error) {
           console.error("Error fetching quests: ", error);
@@ -46,11 +61,18 @@ function App() {
   }, [user]);
 
   useEffect(() => {
-    if (user && user.uid) { // Kontrola, že user není null a má vlastnost uid
-      const unsubscribe = onSnapshot(query(collection(db, "quests"), where("userId", "==", user.uid)), (snapshot) => {
-        const questsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setQuests(questsData);
-      });
+    if (user && user.uid) {
+      // Kontrola, že user není null a má vlastnost uid
+      const unsubscribe = onSnapshot(
+        query(collection(db, "quests"), where("userId", "==", user.uid)),
+        (snapshot) => {
+          const questsData = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setQuests(questsData);
+        }
+      );
       return () => unsubscribe();
     }
   }, [user]);
@@ -59,20 +81,21 @@ function App() {
     const handleResize = () => {
       const windowWidth = window.innerWidth;
       if (windowWidth > 650) {
-        setParentWidth('410px');
+        setParentWidth("410px");
       } else {
-        setParentWidth('auto');
+        setParentWidth("auto");
       }
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     handleResize(); // Voláme funkci po načtení stránky pro správnou inicializaci šířky
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const addQuest = async (title, name, time) => {
-    if (user && user.uid) { // Kontrola, že user není null a má vlastnost uid
+    if (user && user.uid) {
+      // Kontrola, že user není null a má vlastnost uid
       try {
         const newQuest = {
           title,
@@ -88,8 +111,10 @@ function App() {
     }
   };
 
-  const handleSettingsClose = () =>{ setShowSettingsPopup(false)}
-  
+  const handleSettingsClose = () => {
+    setShowSettingsPopup(false);
+  };
+
   const handleSignOut = async () => {
     try {
       await signOut(auth);
@@ -104,7 +129,8 @@ function App() {
   }
 
   const deleteQuest = async (questId) => {
-    if (user && user.uid) { // Kontrola, že user není null a má vlastnost uid
+    if (user && user.uid) {
+      // Kontrola, že user není null a má vlastnost uid
       try {
         await deleteDoc(doc(db, "quests", questId));
       } catch (error) {
@@ -122,8 +148,8 @@ function App() {
           name: updatedQuest.name,
           time: updatedQuest.time,
         });
-        setQuests(prevQuests => 
-          prevQuests.map(quest =>
+        setQuests((prevQuests) =>
+          prevQuests.map((quest) =>
             quest.id === updatedQuest.id ? updatedQuest : quest
           )
         );
@@ -133,32 +159,56 @@ function App() {
     }
   };
 
-  const filteredQuests = quests.filter(quest =>
+  const filteredQuests = quests.filter((quest) =>
     quest.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <div style={{ width: parentWidth > 1000 ? 410 : parentWidth }}>
-      <div className="w-screen h-screen bg-gray-700" style={{ width: parentWidth }}>
-      {showPopup && <QuestPopup addQuest={addQuest} setShowPopup={setShowPopup} />}
-      {ShowSettingsPopup && <SettingsPopup setShowPopup={setShowPopup} handleSettingsClose={handleSettingsClose} handleSignOut={handleSignOut} />}
-        <div className="h-[5%] text-white flex justify-center items-center text-2xl">
-          <h1>QUESTS:</h1>
+      
+      {showPopup && (
+        <QuestPopup addQuest={addQuest} setShowPopup={setShowPopup} />
+      )}
+      {ShowSettingsPopup && (
+        <SettingsPopup
+          setShowPopup={setShowPopup}
+          handleSettingsClose={handleSettingsClose}
+          handleSignOut={handleSignOut}
+        />
+      )}
+
+
+      <div
+        className="w-screen h-screen bg-neutral-900"
+        style={{ width: parentWidth }}
+      >
+        <div className="h-[3%] text-white flex justify-center items-center text-2xl">
+          <h1 className=" mt-3">Tasks</h1>
         </div>
         <div className="h-[10%] text-black flex justify-center items-center text-2xl">
           <input
             type="search"
-            placeholder="Search for your quest!"
+            placeholder="Search for tasks"
             className="rounded placeholder-black"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <div className="h-[65%] bg-gray-600 flex flex-col justify-center items-center text-2xl space-y-3 overflow-y-auto">
-          <QuestList searchQuery={searchQuery} quests={filteredQuests} deleteQuest={deleteQuest} updateQuest={updateQuest} />
+        <div className="h-[65%] bg-neutral-800 flex flex-col justify-center items-center text-2xl space-y-3 overflow-y-auto">
+          <QuestList
+            searchQuery={searchQuery}
+            quests={filteredQuests}
+            deleteQuest={deleteQuest}
+            updateQuest={updateQuest}
+          />
         </div>
-        <div className="h-[10%] bg-gray-500 flex justify-center items-center text-2xl rounded-2xl">
-          <NavBar setShowPopup={setShowPopup} setShowSettingsPopup={setShowSettingsPopup} handleSignOut={handleSignOut} questArrayLength={quests.length} />
+        <div className="h-[10%] bg-neutral-950 flex justify-center items-center text-2xl">
+          <NavBar
+            setShowPopup={setShowPopup}
+            setShowSettingsPopup={setShowSettingsPopup}
+            handleSignOut={handleSignOut}
+            questArrayLength={quests.length}
+          />
         </div>
       </div>
     </div>
